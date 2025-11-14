@@ -31,9 +31,7 @@ uv pip install -r pyproject.toml
 
 3. Set up your `.env` file to customize the environment variables (for model selection, search tools, and other configuration settings):
 
-Get **FREE** access to Gensee Search from https://platform.gensee.ai/
-
-![Image](https://github.com/user-attachments/assets/bb744cf0-0456-4d2d-b1d6-8c0ba6e76877)
+Get **FREE** access to Gensee Search API from https://airesearch.gensee.ai/
 
 ```bash
 cp .env.example .env
@@ -83,9 +81,9 @@ python tests/extract_langsmith_data.py --project-name "YOUR_EXPERIMENT_NAME" --m
 
 This creates `tests/expt_results/deep_research_bench_model-name.jsonl` with the required format. Move the generated JSONL file to a local clone of the Deep Research Bench repository and follow their [Quick Start guide](https://github.com/Ayanami0730/deep_research_bench?tab=readme-ov-file#quick-start) for evaluation submission.
 
-#### Results 
+#### Results
 
-| Name | Summarization | Research | Compression | Total Cost | Total Tokens | RACE Score | 
+| Name | Summarization | Research | Compression | Total Cost | Total Tokens | RACE Score |
 |------|---------------|----------|-------------|------------|--------------|------------|
 | Gensee Search | openai:gpt-4.1-mini | openai:gpt-5 | openai:gpt-4.1 | $158.56 | 165,689,034 | 0.5079 |
 | LangChain GPT-5 | openai:gpt-4.1-mini | openai:gpt-5 | openai:gpt-4.1 |  | 204,640,896 | 0.4943 |
