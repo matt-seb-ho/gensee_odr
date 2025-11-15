@@ -44,7 +44,7 @@ GENSEE_SEARCH_DESCRIPTION = (
 async def call_gensee_search(query: str, max_results: int, config: RunnableConfig = None) -> Dict[str, Any]:
     """Call the serve_gensee_search endpoint asynchronously"""
 
-    url = "https://api.gensee.ai/api/search"
+    url = "https://app.gensee.ai/api/search"
 
     payload = {
         "query": query,
