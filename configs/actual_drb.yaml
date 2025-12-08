@@ -1,0 +1,7 @@
+prompt: 
+- "Please provide a detailed explanation of the differences and connections between Google's recently released A2A protocol and the MCP protocol. Furthermore, elaborate on the innovative aspects of the A2A protocol and the specific problems it is designed to address."
+- "Which Obsidian plugins can effectively replicate Notion's multi-view database functionality (including Table, Kanban, Calendar, and List views)? Please provide a detailed comparison of the strengths and weaknesses of these plugins."
+- "Is there a general method for solving a first-price sealed-bid auction with two bidders who have independent private values drawn from different distributions (i.e., ex-ante asymmetric bidders)?"
+odr_cfg: gemini_2_5.yaml
+output_file: drb_timed.json
+log_file: drb_timeline.log

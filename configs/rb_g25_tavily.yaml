@@ -1,0 +1,19 @@
+prompts: 
+  "2011.13534": "Please help me research the application of deep learning in the field of document understanding, and only refer to papers published on or before February 2021."
+  "2206.05498": |
+    I need a comprehensive literature review on the topic of causality in the application of machine learning algorithms for medical image analysis. My main focus is on how methods like causal inference and causal discovery can enhance the robustness, fairness, and explainability of models when addressing challenges such as domain shift, selection bias, and spurious correlations. Please emphasize the following aspects:
+    1. Causal methods to address out-of-distribution (OOD) generalization and domain adaptation problems.
+    2. Techniques based on causal relationships to generate counterfactual medical images and their applications.
+    3. Research utilizing causal analysis to improve algorithmic fairness, safety, and explainability.
+    References should primarily be in English, especially papers published in top-tier conferences and journals such as MICCAI, ISBI, and IPMI. You may consider research outputs from institutions like Imperial College London. Importantly, your response must strictly reference papers published before November 2022.
+  "2207.14394": |
+    I need a detailed literature review on the "Logic and Accuracy (L&A) Testing" of electronic voting systems in the United States. The core of the research is to evaluate and compare the policies and procedures for L&A testing implemented by different U.S. states to verify voting equipment prior to elections. The review should thoroughly explore the following aspects: 1) the objectives of L&A testing, such as detecting equipment malfunctions, misconfigurations, and preventing specific types of fraud; 2) differences in testing procedures across jurisdictions, particularly among U.S. states, including the scope, rigor, and transparency of the tests; and 3) specific methodologies for evaluating L&A testing effectiveness, such as whether all devices and ballot styles are tested, whether the testing process is public, whether it can detect ballot option shifts, whether it verifies multi-ballot limits, and whether non-deterministic or randomized testing is utilized to enhance security.
+
+    Restrictions are as follows:
+    1. Cutoff Date: All cited literature must have been published on or before August 2022.
+    2. Paper Language: Focus primarily on English-language literature.
+    3. Publishing Institutions: Pay special attention to work published by institutions with outstanding research in election security, such as the University of Michigan.
+    4. Conferences/Journals: Prioritize papers presented at top-tier security and electronic voting conferences, such as USENIX Security and USENIX EVT/E-Vote-ID.
+odr_cfg: gemini_2_5_tavily.yaml
+output_file: rb_g25_tav.json
+# log_file: rb_timeline.log
