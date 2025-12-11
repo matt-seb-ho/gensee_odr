@@ -5,6 +5,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+from open_deep_research.run_with_timeline import estimate_cost_usd
+
 
 def parse_iso(ts: str) -> datetime:
     """Parse ISO8601 timestamp with timezone."""
@@ -13,6 +15,7 @@ def parse_iso(ts: str) -> datetime:
 
 def summarize_records(
     records: Dict[str, Any],
+    recompute_cost: bool = True,
 ) -> Tuple[Optional[float], Optional[float], Optional[float], int, int]:
     """
     Given a records dict (prompt_id -> record), compute:
@@ -49,9 +52,23 @@ def summarize_records(
                 tool_latencies.append(dt)
 
             # Cost: if span has cost_usd, add it
-            cost = span.get("cost_usd")
-            if isinstance(cost, (int, float)):
-                total_cost_prompt += float(cost)
+            if kind == "llm":
+                if recompute_cost:
+                    if span.get("model", None) is None:
+                        # Can't recompute cost without model info
+                        continue
+                    cost = estimate_cost_usd(
+                        model=span.get("model", None),
+                        prompt_tokens=span.get("prompt_tokens", 0),
+                        completion_tokens=span.get("completion_tokens", 0),
+                    )
+                    if cost is not None:
+                        total_cost_prompt += cost
+                        continue  # skip existing cost_usd
+                else:
+                    cost = span.get("cost_usd")
+                    if isinstance(cost, (int, float)):
+                        total_cost_prompt += float(cost)
 
         # Even if a prompt has 0 cost, we track it; it contributes 0 to average.
         prompt_costs.append(total_cost_prompt)

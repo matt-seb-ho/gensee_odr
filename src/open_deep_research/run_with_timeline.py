@@ -32,6 +32,35 @@ PRICING: dict[str, dict[str, float]] = {
         "input": 0.30,  # per 1M tokens,
         "output": 2.50,  # per 1M tokens, includes thinking tokens
     },
+    "gemini-3-pro-preview": {
+        "input": 2.0,  # per 1M tokens,
+        "output": 12.0,  # per 1M tokens, includes thinking tokens
+    },
+}
+UPDATED_PRICING: dict[str, dict[str, float]] = {
+    # Example OpenAI-style entries (replace with your real ones)
+    # "gemini-2.0-flash": {...}
+    # "claude-3.5-sonnet": {...}
+    "gemini-3-pro-preview": {
+        "prompt_threshold": 200_000,
+        "prompt_price_below_threshold": 2.0,  # per 1M tokens,
+        "prompt_price_above_threshold": 4.0,
+        "completion_threshold": 200_000,
+        "completion_price_below_threshold": 12.0,  # per 1M tokens, includes thinking tokens
+        "completion_price_above_threshold": 18.0,
+    },
+    "gemini-2.5-pro": {
+        "prompt_threshold": 200_000,
+        "prompt_price_below_threshold": 1.25,  # per 1M tokens,
+        "prompt_price_above_threshold": 2.50,
+        "completion_threshold": 200_000,
+        "completion_price_below_threshold": 10.0,  # per 1M tokens, includes thinking tokens
+        "completion_price_above_threshold": 15.0,
+    },
+    "gemini-2.5-flash": {
+        "prompt_price": 0.30,  # per 1M tokens,
+        "completion_price": 2.50,  # per 1M tokens, includes thinking tokens
+    },
 }
 
 
@@ -61,6 +90,31 @@ class UsageInfo(TypedDict, total=False):
     thinking_tokens: int
 
 
+def est_cost_helper(
+    pricing_info: dict[str, float],
+    prompt_tokens: int,
+    completion_tokens: int,
+) -> float:
+    if "prompt_threshold" in pricing_info:
+        input_threshold = pricing_info["prompt_threshold"]
+        if prompt_tokens <= input_threshold:
+            input_price = pricing_info["prompt_price_below_threshold"]
+        else:
+            input_price = pricing_info["prompt_price_above_threshold"]
+    else:
+        input_price = pricing_info["prompt_price"]
+    if "completion_threshold" in pricing_info:
+        output_threshold = pricing_info["completion_threshold"]
+        if completion_tokens <= output_threshold:
+            output_price = pricing_info["completion_price_below_threshold"]
+        else:
+            output_price = pricing_info["completion_price_above_threshold"]
+    else:
+        output_price = pricing_info["completion_price"]
+    total_cost = (prompt_tokens * input_price + completion_tokens * output_price) * 1e-6
+    return total_cost
+
+
 def estimate_cost_usd(
     model: str | None,
     prompt_tokens: int | None,
@@ -68,14 +122,29 @@ def estimate_cost_usd(
 ) -> float | None:
     """Return estimated USD cost, or None if we lack info."""
     if model is None or prompt_tokens is None or completion_tokens is None:
+        print(
+            f"warning: missing info for cost estimation: {model}, {prompt_tokens}, {completion_tokens}"
+        )
         return None
-    price = PRICING.get(model)
-    if not price:
+    pricing_info = UPDATED_PRICING.get(model)
+    if not pricing_info:
+        print(f"warning: no pricing info for model {model}")
         return None
-    total_cost = (
-        prompt_tokens * price["input"] + completion_tokens * price["output"]
-    ) * 1e-6
+    total_cost = est_cost_helper(
+        pricing_info,
+        prompt_tokens,
+        completion_tokens,
+    )
     return total_cost
+
+    # price = PRICING.get(model)
+    # if not price:
+    #     print(f"warning: no pricing info for model {model}")
+    #     return None
+    # total_cost = (
+    #     prompt_tokens * price["input"] + completion_tokens * price["output"]
+    # ) * 1e-6
+    # return total_cost
 
 
 def extract_usage_from_event(ev: dict[str, Any]) -> UsageInfo | None:
